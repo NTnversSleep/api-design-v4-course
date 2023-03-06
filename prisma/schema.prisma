@@ -25,25 +25,27 @@ model Product {
   belongsToId String
   belongsTo   User     @relation(fields: [belongsToId], references: [id])
   updates     Update[]
+
+  @@unique([id, belongsToId])
 }
 
-enum UPDATE_STATUSES {
+enum UPDATE_STATUS {
   IN_PROGRESS
   SHIPPED
   DEPRECATED
 }
 
 model Update {
-  id          String        @id @default(uuid())
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime
-  title       String
-  body        String
-  status      UPDATE_STATUSES @default(IN_PROGRESS)
-  version     String?
-  asset       String?
-  productID   String
-  product     Product       @relation(fields: [productID], references: [id])
+  id           String        @id @default(uuid())
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt()
+  title        String
+  body         String
+  status       UPDATE_STATUS @default(IN_PROGRESS)
+  version      String?
+  asset        String?
+  productID    String
+  product      Product       @relation(fields: [productID], references: [id])
   updatePoints UpdatePoint[]
 }
 
